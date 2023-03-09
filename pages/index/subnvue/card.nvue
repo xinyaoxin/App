@@ -1,0 +1,111 @@
+<template>
+	<div>
+		<uni-card :title=cardInfo.subTitle :sub-title=cardInfo.maintitle :extra=cardInfo.extra class="cardstyle">
+			<text class="uni-body">{{ cardInfo.extra }}</text>
+			<button class="button" type="primary" @click="toggle('bottom')"><text class="button-text">底部</text></button>
+			<uni-popup ref="popup" background-color="#fff">
+				<view class="popup-content" :class="{ 'popup-height': type === 'left' || type === 'right' }">
+					<button style="width: 200px; margin: 5px auto;" type="primary">支付宝支付</button>
+					<button style="width: 200px; margin: 5px auto;" type="primary">微信支付</button>
+				</view>
+			</uni-popup>
+			<button style="width: 80px; margin: 5px auto;" type="primary">导航</button>
+		</uni-card>
+	</div>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				
+					wWidth:0,
+					windowHeight:0,
+					show: false,
+					type: 'center',
+					href: 'https://uniapp.dcloud.io/component/README?id=uniui',
+					key: "66305aa05776a166b948321344673836",
+					amapPlugin: null,
+					longitude: 118.80470,
+					latitude: 32.06267,
+					markers: [{
+						id: 101, //id 必填项
+						extra: '0.26km',
+						maintitle: '南京AAAAAAAAA',
+						width: 50,
+						height: 50,
+						longitude: 118.84124,
+						latitude: 32.05229,
+						iconPath: "../../static/c1.png",
+						label: {
+							content: '钟山风景区',
+							color: 'red',
+							fontSize: 20
+				
+						}
+					}, {
+						id: 100, //id 必填项
+						maintitle: '南京BBBBBBBBB',
+						extra: '1.24km',
+						width: 50,
+						height: 50,
+						longitude: 118.77148,
+						latitude: 32.01630,
+						iconPath: "../../static/c2.png",
+						label: {
+							content: '秦淮河',
+							color: 'red',
+							fontSize: 20
+				
+						}
+					}],
+					mapInfo: [],
+					polyline: [{
+						points: [],
+						color: "#31c27c",
+						width: 10,
+						arrowLine: true,
+						borderWidth: 2 //线的边框宽度，还有很多参数，请看文档 
+					}],
+					muDD: {},
+					cardInfo: {
+						extra: '',
+						subTitle: '',
+						maintitle: '',
+						latitude: "",
+						longitude: '',
+					},
+					initCardInfo: {}
+				}
+			},
+			mounted() {
+				console.log(this.initCardInfo)
+				this.$nextTick(() => {
+					this.cardInfo.maintitle = this.markers[0].maintitle
+					this.cardInfo.subTitle = this.markers[0].label.content
+					this.cardInfo.extra = '0.26km'
+				})
+				this.muDD = this.markers[0]
+			},
+
+			methods: {
+				toggle(type) {
+					this.type = type
+					// open 方法传入参数 等同在 uni-popup 组件上绑定 type属性
+					this.$refs.popup.open(type)
+				},
+			}
+
+		}
+</script>
+
+<style>
+	.cardstyle{
+		position: absolute;
+		top: 300px;
+		left: 50%;
+		transform: translate(-50%);
+		background-color: red;
+		}
+
+</style>

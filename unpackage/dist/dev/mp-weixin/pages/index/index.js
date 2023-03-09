@@ -98,29 +98,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recyclableRender", function() { return recyclableRender; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components
-try {
-  components = {
-    uniCard: function () {
-      return __webpack_require__.e(/*! import() | uni_modules/uni-card/components/uni-card/uni-card */ "uni_modules/uni-card/components/uni-card/uni-card").then(__webpack_require__.bind(null, /*! @/uni_modules/uni-card/components/uni-card/uni-card.vue */ 41))
-    },
-  }
-} catch (e) {
-  if (
-    e.message.indexOf("Cannot find module") !== -1 &&
-    e.message.indexOf(".vue") !== -1
-  ) {
-    console.error(e.message)
-    console.error("1. 排查组件名称拼写是否正确")
-    console.error(
-      "2. 排查组件是否符合 easycom 规范，文档：https://uniapp.dcloud.net.cn/collocation/pages?id=easycom"
-    )
-    console.error(
-      "3. 若组件不符合 easycom 规范，需手动引入，并在 components 中注册该组件"
-    )
-  } else {
-    throw e
-  }
-}
 var render = function () {
   var _vm = this
   var _h = _vm.$createElement
@@ -178,10 +155,21 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // import amap from '../../common/AMapWX_SDK_V1.3.0/amap-wx.130.js'
 var _default = {
   data: function data() {
     return {
+      wWidth: 0,
+      windowHeight: 0,
       show: false,
       type: 'center',
       href: 'https://uniapp.dcloud.io/component/README?id=uniui',
@@ -241,21 +229,30 @@ var _default = {
     };
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
     console.log(this.initCardInfo);
     this.$nextTick(function () {
-      _this.cardInfo.maintitle = _this.markers[0].maintitle;
-      _this.cardInfo.subTitle = _this.markers[0].label.content;
-      _this.cardInfo.extra = '0.26km';
+      _this2.cardInfo.maintitle = _this2.markers[0].maintitle;
+      _this2.cardInfo.subTitle = _this2.markers[0].label.content;
+      _this2.cardInfo.extra = '0.26km';
     });
     this.muDD = this.markers[0];
   },
   onLoad: function onLoad() {
-    var that = this;
+    var _this = this;
+    uni.getSystemInfo({
+      success: function success(res) {
+        console.log('首屏内容', res);
+        _this.windowHeight = res.windowHeight;
+      }
+    });
   },
   methods: {
+    showCard: function showCard() {},
     toggle: function toggle(type) {
-      this.type = true;
+      this.type = type;
+      // open 方法传入参数 等同在 uni-popup 组件上绑定 type属性
+      this.$refs.popup.open(type);
     },
     markertap: function markertap(e) {
       console.log(e);
@@ -364,60 +361,89 @@ var _default = {
         }
       });
     },
-    openPay: function openPay() {
-      console.log('打开支付');
-      // uni.getProvider({
-      // 	service: 'payment',
-      // 	success: function (res) {
-      // 		console.log('获取服务商',res.provider)
-      // 		if (~res.provider.indexOf('wxpay')) {
-      // 			console.log(1234);
-      // 			uni.requestPayment(obj)
-      // 		}
-      // 	}
-      // });
-
-      // //订单对象，从服务器获取
-      // var orderInfo = {
-      //   "appid": "wxf603a2c62a54b49f",  // 应用ID（AppID）
-      //   "partnerid": "1481231252",      // 商户号（PartnerID）
-      //   "prepayid": "wx20225421345678234342345234fbe90000", // 预支付交易会话ID
-      //   "package": "Sign=WXPay",        // 固定值
-      //   "noncestr": "c5sEwbaNPiXAF3iv", // 随机字符串
-      //   "timestamp": "1597935292",        // 时间戳（单位：秒）
-      //   "sign": "A842B45937F6EFF60DEC7A2EAA52D5A0" // 签名，这里用的 MD5 签名
-      // };
-      // uni.getProvider({
-      //     service: 'payment',
-      //     success: function (res) {
-      //         console.log(res.provider)
-      //         if (~res.provider.indexOf('alipay')) {
-      //             uni.requestPayment({
-      //                 "provider": "alipay",  //固定值为"wxpay"
-      //                 "orderInfo": orderInfo, 
-      //                 success: function (res) {
-      //                     var rawdata = JSON.parse(res.rawdata);
-      //                     console.log("支付成功");
-      //                 },
-      //                 fail: function (err) {
-      //                     console.log('支付失败:' + JSON.stringify(err));
-      //                 }
-      //             });
-      //         }
-      //     }
-      // });
-
-      var orderInfo = 'app_id=2015052600090779&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.02%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22314VYGIAGG7ZOYY%22%7D&charset=utf-8&method=alipay.trade.app.pay&sign_type=RSA2&timestamp=2016-08-15%2012%3A12%3A15&version=1.0&sign=MsbylYkCzlfYLy9PeRwUUIg9nZPeN9SfXPNavUCroGKR5Kqvx0nEnd3eRmKxJuthNUx4ERCXe552EV9PfwexqW%2B1wbKOdYtDIb4%2B7PL3Pc94RZL0zKaWcaY3tSL89%2FuAVUsQuFqEJdhIukuKygrXucvejOUgTCfoUdwTi7z%2BZzQ%3D'; //从服务器获取的订单
+    openPayAli: function openPayAli() {
+      //支付宝 调用之前传入必要数据，向后端请求订单信息orderInfo
+      //wx
+      /*
+      {
+      	appid,
+      	noncestr,
+      	package,
+      	partnerid,
+      	prepayid,
+      	timestamp,
+      	sign,
+      }
+      */
+      var payData = {
+        app_id: '2021003181698306',
+        channel: 'aliPay',
+        title: '标题1111',
+        price: 222,
+        bill_note: '2021231003181698306123',
+        bill_timout: 300
+      };
+      var orderInfo = 'app_id=2021003181698306&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.02%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22314VYGIAGG7ZOYY%22%7D&charset=utf-8&method=alipay.trade.app.pay&sign_type=RSA2&timestamp=2016-08-15%2012%3A12%3A15&version=1.0&sign=MsbylYkCzlfYLy9PeRwUUIg9nZPeN9SfXPNavUCroGKR5Kqvx0nEnd3eRmKxJuthNUx4ERCXe552EV9PfwexqW%2B1wbKOdYtDIb4%2B7PL3Pc94RZL0zKaWcaY3tSL89%2FuAVUsQuFqEJdhIukuKygrXucvejOUgTCfoUdwTi7z%2BZzQ%3D'; //从服务器获取的订单
       uni.getProvider({
         service: 'payment',
         success: function success(res) {
-          console.log(11, res.provider);
+          console.log('获取的服务商', res.provider);
           if (~res.provider.indexOf('alipay')) {
             uni.requestPayment({
               "provider": "alipay",
               //固定值为"alipay"
               "orderInfo": orderInfo,
               //此处为服务器返回的订单信息字符串
+              success: function success(res) {
+                var rawdata = JSON.parse(res.rawdata);
+                console.log("支付成功");
+              },
+              fail: function fail(err) {
+                console.log('支付失败:' + JSON.stringify(err));
+              }
+            });
+          }
+        }
+      });
+    },
+    openPayWx: function openPayWx() {
+      //支付宝 调用之前传入必要数据，向后端请求订单信息orderInfo
+      //wx
+      /*  
+      {
+      	appid,
+      	noncestr,
+      	package,
+      	partnerid,
+      	prepayid,
+      	timestamp,
+      	sign,
+      }
+      */
+      var orderInfo = {
+        "appid": "wx499123451237c70e",
+        // 应用ID（AppID）
+        "partnerid": "1483245132",
+        // 商户号（PartnerID）
+        "prepayid": "wx202254123423241234234112331be90000",
+        // 预支付交易会话ID
+        "package": "Sign=WXPay",
+        // 固定值
+        "noncestr": "c5sEwbaNPiXAF3iv",
+        // 随机字符串
+        "timestamp": 1597935292,
+        "sign": "A842B45937F6EFF60DEC7A2EAA52D5A0" // 签名，这里用的 MD5 签名
+      };
+
+      uni.getProvider({
+        service: 'payment',
+        success: function success(res) {
+          console.log(res.provider);
+          if (~res.provider.indexOf('wxpay')) {
+            uni.requestPayment({
+              "provider": "wxpay",
+              //固定值为"wxpay"
+              "orderInfo": orderInfo,
               success: function success(res) {
                 var rawdata = JSON.parse(res.rawdata);
                 console.log("支付成功");
