@@ -1,5 +1,13 @@
 {
   "navigationBarTitleText": "uni-app",
-  "titleNView": false,
+  "subNVues": [
+    {
+      "id": "card",
+      "path": "pages/index/subnvue/card",
+      "style": {
+        "background": "transparent"
+      }
+    }
+  ],
   "usingComponents": {}
 }

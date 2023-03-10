@@ -164,12 +164,18 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
+//
 // import amap from '../../common/AMapWX_SDK_V1.3.0/amap-wx.130.js'
 var _default = {
   data: function data() {
     return {
       wWidth: 0,
       windowHeight: 0,
+      windowWidth: 0,
       show: false,
       type: 'center',
       href: 'https://uniapp.dcloud.io/component/README?id=uniui',
@@ -230,13 +236,17 @@ var _default = {
   },
   mounted: function mounted() {
     var _this2 = this;
-    console.log(this.initCardInfo);
     this.$nextTick(function () {
       _this2.cardInfo.maintitle = _this2.markers[0].maintitle;
       _this2.cardInfo.subTitle = _this2.markers[0].label.content;
       _this2.cardInfo.extra = '0.26km';
     });
     this.muDD = this.markers[0];
+    console.log('mounted向nvue传递信息', this.muDD, this.cardInfo);
+    uni.$emit('mapData', {
+      muDD: this.muDD,
+      cardInfo: this.cardInfo
+    });
   },
   onLoad: function onLoad() {
     var _this = this;
@@ -244,6 +254,7 @@ var _default = {
       success: function success(res) {
         console.log('首屏内容', res);
         _this.windowHeight = res.windowHeight;
+        _this.windowWidth = res.windowWidth;
       }
     });
   },
@@ -280,7 +291,6 @@ var _default = {
     // 打开的点击事件，传经纬度和地点名 
     openMap: function openMap(e) {
       this.show = true;
-      console.log('初始1111', e);
       for (var i = 0; i < this.markers.length; i++) {
         if (e.detail.markerId === this.markers[i].id) {
           this.muDD = this.markers[i];
@@ -289,6 +299,14 @@ var _default = {
           this.cardInfo.extra = this.markers[i].extra;
         }
       }
+      console.log('父点标记传递信息', this.muDD, this.cardInfo);
+      // 在 subNVue/vue 页面触发事件
+      // $emit(eventName, data)  
+      uni.$emit('mapData', {
+        muDD: this.muDD,
+        cardInfo: this.cardInfo
+      });
+
       // let url = "";
       // let latitude =e.detail.latitude;
       // let longitude= e.detail.longitude;
@@ -360,102 +378,93 @@ var _default = {
           });
         }
       });
-    },
-    openPayAli: function openPayAli() {
-      //支付宝 调用之前传入必要数据，向后端请求订单信息orderInfo
-      //wx
-      /*
-      {
-      	appid,
-      	noncestr,
-      	package,
-      	partnerid,
-      	prepayid,
-      	timestamp,
-      	sign,
-      }
-      */
-      var payData = {
-        app_id: '2021003181698306',
-        channel: 'aliPay',
-        title: '标题1111',
-        price: 222,
-        bill_note: '2021231003181698306123',
-        bill_timout: 300
-      };
-      var orderInfo = 'app_id=2021003181698306&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.02%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22314VYGIAGG7ZOYY%22%7D&charset=utf-8&method=alipay.trade.app.pay&sign_type=RSA2&timestamp=2016-08-15%2012%3A12%3A15&version=1.0&sign=MsbylYkCzlfYLy9PeRwUUIg9nZPeN9SfXPNavUCroGKR5Kqvx0nEnd3eRmKxJuthNUx4ERCXe552EV9PfwexqW%2B1wbKOdYtDIb4%2B7PL3Pc94RZL0zKaWcaY3tSL89%2FuAVUsQuFqEJdhIukuKygrXucvejOUgTCfoUdwTi7z%2BZzQ%3D'; //从服务器获取的订单
-      uni.getProvider({
-        service: 'payment',
-        success: function success(res) {
-          console.log('获取的服务商', res.provider);
-          if (~res.provider.indexOf('alipay')) {
-            uni.requestPayment({
-              "provider": "alipay",
-              //固定值为"alipay"
-              "orderInfo": orderInfo,
-              //此处为服务器返回的订单信息字符串
-              success: function success(res) {
-                var rawdata = JSON.parse(res.rawdata);
-                console.log("支付成功");
-              },
-              fail: function fail(err) {
-                console.log('支付失败:' + JSON.stringify(err));
-              }
-            });
-          }
-        }
-      });
-    },
-    openPayWx: function openPayWx() {
-      //支付宝 调用之前传入必要数据，向后端请求订单信息orderInfo
-      //wx
-      /*  
-      {
-      	appid,
-      	noncestr,
-      	package,
-      	partnerid,
-      	prepayid,
-      	timestamp,
-      	sign,
-      }
-      */
-      var orderInfo = {
-        "appid": "wx499123451237c70e",
-        // 应用ID（AppID）
-        "partnerid": "1483245132",
-        // 商户号（PartnerID）
-        "prepayid": "wx202254123423241234234112331be90000",
-        // 预支付交易会话ID
-        "package": "Sign=WXPay",
-        // 固定值
-        "noncestr": "c5sEwbaNPiXAF3iv",
-        // 随机字符串
-        "timestamp": 1597935292,
-        "sign": "A842B45937F6EFF60DEC7A2EAA52D5A0" // 签名，这里用的 MD5 签名
-      };
-
-      uni.getProvider({
-        service: 'payment',
-        success: function success(res) {
-          console.log(res.provider);
-          if (~res.provider.indexOf('wxpay')) {
-            uni.requestPayment({
-              "provider": "wxpay",
-              //固定值为"wxpay"
-              "orderInfo": orderInfo,
-              success: function success(res) {
-                var rawdata = JSON.parse(res.rawdata);
-                console.log("支付成功");
-              },
-              fail: function fail(err) {
-                console.log('支付失败:' + JSON.stringify(err));
-              }
-            });
-          }
-        }
-      });
-    }
+    } // openPayAli() {
+    // 	//支付宝 调用之前传入必要数据，向后端请求订单信息orderInfo
+    // 	//wx
+    // 	/*
+    // 	{
+    // 		appid,
+    // 		noncestr,
+    // 		package,
+    // 		partnerid,
+    // 		prepayid,
+    // 		timestamp,
+    // 		sign,
+    // 	}
+    // 	*/
+    // 	let payData = {
+    // 		app_id: '2021003181698306',
+    // 		channel: 'aliPay',
+    // 		title: '标题1111',
+    // 		price: 222,
+    // 		bill_note: '2021231003181698306123',
+    // 		bill_timout: 300,
+    // 	}
+    // 	var orderInfo =
+    // 		'app_id=2021003181698306&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.02%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22314VYGIAGG7ZOYY%22%7D&charset=utf-8&method=alipay.trade.app.pay&sign_type=RSA2&timestamp=2016-08-15%2012%3A12%3A15&version=1.0&sign=MsbylYkCzlfYLy9PeRwUUIg9nZPeN9SfXPNavUCroGKR5Kqvx0nEnd3eRmKxJuthNUx4ERCXe552EV9PfwexqW%2B1wbKOdYtDIb4%2B7PL3Pc94RZL0zKaWcaY3tSL89%2FuAVUsQuFqEJdhIukuKygrXucvejOUgTCfoUdwTi7z%2BZzQ%3D'; //从服务器获取的订单
+    // 	uni.getProvider({
+    // 		service: 'payment',
+    // 		success: function(res) {
+    // 			console.log('获取的服务商', res.provider)
+    // 			if (~res.provider.indexOf('alipay')) {
+    // 				uni.requestPayment({
+    // 					"provider": "alipay", //固定值为"alipay"
+    // 					"orderInfo": orderInfo, //此处为服务器返回的订单信息字符串
+    // 					success: function(res) {
+    // 						var rawdata = JSON.parse(res.rawdata);
+    // 						console.log("支付成功");
+    // 					},
+    // 					fail: function(err) {
+    // 						console.log('支付失败:' + JSON.stringify(err));
+    // 					}
+    // 				});
+    // 			}
+    // 		}
+    // 	});
+    // },
+    // openPayWx() {
+    // 	//支付宝 调用之前传入必要数据，向后端请求订单信息orderInfo
+    // 	//wx
+    // 	/*  
+    // 	{
+    // 		appid,
+    // 		noncestr,
+    // 		package,
+    // 		partnerid,
+    // 		prepayid,
+    // 		timestamp,
+    // 		sign,
+    // 	}
+    // 	*/
+    // 	var orderInfo = {
+    // 		"appid": "wx499123451237c70e", // 应用ID（AppID）
+    // 		"partnerid": "1483245132", // 商户号（PartnerID）
+    // 		"prepayid": "wx202254123423241234234112331be90000", // 预支付交易会话ID
+    // 		"package": "Sign=WXPay", // 固定值
+    // 		"noncestr": "c5sEwbaNPiXAF3iv", // 随机字符串
+    // 		"timestamp": 1597935292,
+    // 		"sign": "A842B45937F6EFF60DEC7A2EAA52D5A0" // 签名，这里用的 MD5 签名
+    // 	};
+    // 	uni.getProvider({
+    // 		service: 'payment',
+    // 		success: function(res) {
+    // 			console.log(res.provider)
+    // 			if (~res.provider.indexOf('wxpay')) {
+    // 				uni.requestPayment({
+    // 					"provider": "wxpay", //固定值为"wxpay"
+    // 					"orderInfo": orderInfo,
+    // 					success: function(res) {
+    // 						var rawdata = JSON.parse(res.rawdata);
+    // 						console.log("支付成功");
+    // 					},
+    // 					fail: function(err) {
+    // 						console.log('支付失败:' + JSON.stringify(err));
+    // 					}
+    // 				});
+    // 			}
+    // 		}
+    // 	});
+    // }
   }
 };
 exports.default = _default;

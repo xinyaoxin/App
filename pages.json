@@ -3,7 +3,7 @@
 		"path": "pages/index/index",
 		"style": {
 			"navigationBarTitleText": "uni-app", //导航栏标题文字内容 
-			"titleNView":false,
+			// "titleNView":false,
 			"app-plus": {
 				"subNVues": [{
 					"id": "card", // 唯一标识  
@@ -16,6 +16,20 @@
 						"background": "transparent"
 					}
 				}]
+			},
+			"mp-weixin":{
+				"subNVues": [{
+					"id": "card", // 唯一标识  
+					"path": "pages/index/subnvue/card", // 页面路径  
+					// "type": "popup",
+					"style": {
+					// 	"dock": "right",
+					// 	"width": "300px",
+					// 	"height": "350px",
+						"background": "transparent"
+					}
+				}]
+				
 			}
 		}
 	}],

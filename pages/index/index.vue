@@ -1,21 +1,26 @@
 <template>
 	<view class="container">
-		<button @click="showCard" >展示card</button>
-		<map id="map_container" :latitude="latitude" :longitude="longitude" scale="11" :markers="markers" :style="'height:'+windowHeight-300+'px;'"
-			:show-location="true" @markertap="openMap" @updated='mapUpdated' @tap='closeMapMarker' :polyline="polyline">
-			<!-- <cover-view  class="covewContainer">
-				<uni-card :title=cardInfo.subTitle :sub-title=cardInfo.maintitle :extra=cardInfo.extra class="cardstyle">
+		<!-- <uni-card :title=cardInfo.subTitle :sub-title=cardInfo.maintitle :extra=cardInfo.extra
+			class="cardstyle">
 			<text class="uni-body">{{ cardInfo.extra }}</text>
-			<button class="button" type="primary" @click="toggle('bottom')"><text class="button-text">底部</text></button>
+			<button style="width: 80px; margin: 5px auto;" class="button" type="primary" @click="toggle('bottom')"><text
+					class="button-text">底部</text></button>
 			<uni-popup ref="popup" background-color="#fff">
 				<view class="popup-content" :class="{ 'popup-height': type === 'left' || type === 'right' }">
-					<button style="width: 200px; margin: 5px auto;" type="primary" @click="openPayAli">支付宝支付</button>
-					<button style="width: 200px; margin: 5px auto;" type="primary" @click="openPayWx">微信支付</button>
+					<button style="width: 200px; margin: 5px auto;" type="primary"
+						@click="openPayAli">支付宝支付</button>
+					<button style="width: 200px; margin: 5px auto;" type="primary"
+						@click="openPayWx">微信支付</button>
 				</view>
-			</uni-popup>
+			</uni-popup> 
 			<button style="width: 80px; margin: 5px auto;" type="primary" @click="openOtherMap">导航</button>
-		</uni-card>
-			</cover-view> -->
+		</uni-card> -->
+		<map id="map_container" :latitude="latitude" :longitude="longitude" scale="11" :markers="markers"
+			:style="'height:'+windowHeight+'px;width:' +windowWidth+'px;'" :show-location="true" @markertap="openMap" @updated='mapUpdated'
+			@tap='closeMapMarker' :polyline="polyline">
+			<cover-view class="covewContainer">
+				
+			</cover-view>
 		</map>
 		
 	</view>
@@ -26,8 +31,9 @@
 	export default {
 		data() {
 			return {
-				wWidth:0,
-				windowHeight:0,
+				wWidth: 0,
+				windowHeight: 0,
+				windowWidth:0,
 				show: false,
 				type: 'center',
 				href: 'https://uniapp.dcloud.io/component/README?id=uniui',
@@ -86,32 +92,37 @@
 			}
 		},
 		mounted() {
-			console.log(this.initCardInfo)
 			this.$nextTick(() => {
 				this.cardInfo.maintitle = this.markers[0].maintitle
 				this.cardInfo.subTitle = this.markers[0].label.content
 				this.cardInfo.extra = '0.26km'
 			})
 			this.muDD = this.markers[0]
+			console.log('mounted向nvue传递信息',this.muDD,this.cardInfo)
+			uni.$emit('mapData', {
+				muDD:this.muDD,
+				cardInfo:this.cardInfo
+			});
 		},
 		onLoad() {
 			let _this = this
 			uni.getSystemInfo({
 				success: function(res) {
-					console.log('首屏内容',res);
+					console.log('首屏内容', res);
 					_this.windowHeight = res.windowHeight
+					_this.windowWidth = res.windowWidth
 				}
 			})
 		},
 
 		methods: {
-			showCard(){
+			showCard() {
 				//#ifdef APP-PLUS
 				uni.getSubNVueById('card').show('slide-in-bottom', 200);
 				//#endif
 			},
-			
-			
+
+
 			toggle(type) {
 				this.type = type
 				// open 方法传入参数 等同在 uni-popup 组件上绑定 type属性
@@ -143,8 +154,8 @@
 
 			// 打开的点击事件，传经纬度和地点名 
 			openMap(e) {
+				
 				this.show = true
-				console.log('初始1111', e)
 				for (let i = 0; i < this.markers.length; i++) {
 					if (e.detail.markerId === this.markers[i].id) {
 						this.muDD = this.markers[i]
@@ -153,6 +164,14 @@
 						this.cardInfo.extra = this.markers[i].extra
 					}
 				}
+				console.log('父点标记传递信息', this.muDD,this.cardInfo)
+				// 在 subNVue/vue 页面触发事件
+				// $emit(eventName, data)  
+				uni.$emit('mapData', {
+					muDD:this.muDD,
+					cardInfo:this.cardInfo
+				});
+				
 				// let url = "";
 				// let latitude =e.detail.latitude;
 				// let longitude= e.detail.longitude;
@@ -225,94 +244,94 @@
 					}
 				});
 			},
-			openPayAli() {
-				//支付宝 调用之前传入必要数据，向后端请求订单信息orderInfo
-				//wx
-				/*
-				{
-					appid,
-					noncestr,
-					package,
-					partnerid,
-					prepayid,
-					timestamp,
-					sign,
-				}
-				*/
-				let payData = {
-					app_id: '2021003181698306',
-					channel: 'aliPay',
-					title: '标题1111',
-					price: 222,
-					bill_note: '2021231003181698306123',
-					bill_timout: 300,
-				}
-				var orderInfo =
-					'app_id=2021003181698306&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.02%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22314VYGIAGG7ZOYY%22%7D&charset=utf-8&method=alipay.trade.app.pay&sign_type=RSA2&timestamp=2016-08-15%2012%3A12%3A15&version=1.0&sign=MsbylYkCzlfYLy9PeRwUUIg9nZPeN9SfXPNavUCroGKR5Kqvx0nEnd3eRmKxJuthNUx4ERCXe552EV9PfwexqW%2B1wbKOdYtDIb4%2B7PL3Pc94RZL0zKaWcaY3tSL89%2FuAVUsQuFqEJdhIukuKygrXucvejOUgTCfoUdwTi7z%2BZzQ%3D'; //从服务器获取的订单
-				uni.getProvider({
-					service: 'payment',
-					success: function(res) {
-						console.log('获取的服务商', res.provider)
-						if (~res.provider.indexOf('alipay')) {
-							uni.requestPayment({
-								"provider": "alipay", //固定值为"alipay"
-								"orderInfo": orderInfo, //此处为服务器返回的订单信息字符串
-								success: function(res) {
-									var rawdata = JSON.parse(res.rawdata);
-									console.log("支付成功");
-								},
-								fail: function(err) {
-									console.log('支付失败:' + JSON.stringify(err));
-								}
-							});
-						}
-					}
-				});
-			},
+			// openPayAli() {
+			// 	//支付宝 调用之前传入必要数据，向后端请求订单信息orderInfo
+			// 	//wx
+			// 	/*
+			// 	{
+			// 		appid,
+			// 		noncestr,
+			// 		package,
+			// 		partnerid,
+			// 		prepayid,
+			// 		timestamp,
+			// 		sign,
+			// 	}
+			// 	*/
+			// 	let payData = {
+			// 		app_id: '2021003181698306',
+			// 		channel: 'aliPay',
+			// 		title: '标题1111',
+			// 		price: 222,
+			// 		bill_note: '2021231003181698306123',
+			// 		bill_timout: 300,
+			// 	}
+			// 	var orderInfo =
+			// 		'app_id=2021003181698306&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.02%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22314VYGIAGG7ZOYY%22%7D&charset=utf-8&method=alipay.trade.app.pay&sign_type=RSA2&timestamp=2016-08-15%2012%3A12%3A15&version=1.0&sign=MsbylYkCzlfYLy9PeRwUUIg9nZPeN9SfXPNavUCroGKR5Kqvx0nEnd3eRmKxJuthNUx4ERCXe552EV9PfwexqW%2B1wbKOdYtDIb4%2B7PL3Pc94RZL0zKaWcaY3tSL89%2FuAVUsQuFqEJdhIukuKygrXucvejOUgTCfoUdwTi7z%2BZzQ%3D'; //从服务器获取的订单
+			// 	uni.getProvider({
+			// 		service: 'payment',
+			// 		success: function(res) {
+			// 			console.log('获取的服务商', res.provider)
+			// 			if (~res.provider.indexOf('alipay')) {
+			// 				uni.requestPayment({
+			// 					"provider": "alipay", //固定值为"alipay"
+			// 					"orderInfo": orderInfo, //此处为服务器返回的订单信息字符串
+			// 					success: function(res) {
+			// 						var rawdata = JSON.parse(res.rawdata);
+			// 						console.log("支付成功");
+			// 					},
+			// 					fail: function(err) {
+			// 						console.log('支付失败:' + JSON.stringify(err));
+			// 					}
+			// 				});
+			// 			}
+			// 		}
+			// 	});
+			// },
 
-			openPayWx() {
-				//支付宝 调用之前传入必要数据，向后端请求订单信息orderInfo
-				//wx
-				/*  
-				{
-					appid,
-					noncestr,
-					package,
-					partnerid,
-					prepayid,
-					timestamp,
-					sign,
-				}
-				*/
-				var orderInfo = {
-					"appid": "wx499123451237c70e", // 应用ID（AppID）
-					"partnerid": "1483245132", // 商户号（PartnerID）
-					"prepayid": "wx202254123423241234234112331be90000", // 预支付交易会话ID
-					"package": "Sign=WXPay", // 固定值
-					"noncestr": "c5sEwbaNPiXAF3iv", // 随机字符串
-					"timestamp": 1597935292,
-					"sign": "A842B45937F6EFF60DEC7A2EAA52D5A0" // 签名，这里用的 MD5 签名
-				};
-				uni.getProvider({
-					service: 'payment',
-					success: function(res) {
-						console.log(res.provider)
-						if (~res.provider.indexOf('wxpay')) {
-							uni.requestPayment({
-								"provider": "wxpay", //固定值为"wxpay"
-								"orderInfo": orderInfo,
-								success: function(res) {
-									var rawdata = JSON.parse(res.rawdata);
-									console.log("支付成功");
-								},
-								fail: function(err) {
-									console.log('支付失败:' + JSON.stringify(err));
-								}
-							});
-						}
-					}
-				});
-			}
+			// openPayWx() {
+			// 	//支付宝 调用之前传入必要数据，向后端请求订单信息orderInfo
+			// 	//wx
+			// 	/*  
+			// 	{
+			// 		appid,
+			// 		noncestr,
+			// 		package,
+			// 		partnerid,
+			// 		prepayid,
+			// 		timestamp,
+			// 		sign,
+			// 	}
+			// 	*/
+			// 	var orderInfo = {
+			// 		"appid": "wx499123451237c70e", // 应用ID（AppID）
+			// 		"partnerid": "1483245132", // 商户号（PartnerID）
+			// 		"prepayid": "wx202254123423241234234112331be90000", // 预支付交易会话ID
+			// 		"package": "Sign=WXPay", // 固定值
+			// 		"noncestr": "c5sEwbaNPiXAF3iv", // 随机字符串
+			// 		"timestamp": 1597935292,
+			// 		"sign": "A842B45937F6EFF60DEC7A2EAA52D5A0" // 签名，这里用的 MD5 签名
+			// 	};
+			// 	uni.getProvider({
+			// 		service: 'payment',
+			// 		success: function(res) {
+			// 			console.log(res.provider)
+			// 			if (~res.provider.indexOf('wxpay')) {
+			// 				uni.requestPayment({
+			// 					"provider": "wxpay", //固定值为"wxpay"
+			// 					"orderInfo": orderInfo,
+			// 					success: function(res) {
+			// 						var rawdata = JSON.parse(res.rawdata);
+			// 						console.log("支付成功");
+			// 					},
+			// 					fail: function(err) {
+			// 						console.log('支付失败:' + JSON.stringify(err));
+			// 					}
+			// 				});
+			// 			}
+			// 		}
+			// 	});
+			// }
 
 
 		}
@@ -320,7 +339,6 @@
 </script>
 
 <style>
-
 	.container {
 		padding: 0px 5px;
 		margin: 0px;
@@ -328,18 +346,19 @@
 		line-height: 24px;
 
 	}
-
+/* 
 	#map_container {
-		width: 100%;
-		
-	}
-	/* .covewContainer{
-		position: relative;
-		top: 55vh;
+		width: 10%;
+
 	} */
 
-	.cardstyle { 
-		width: 300px;
-		
-	} 
+	.covewContainer {
+		position: relative;
+		top: 55vh;
+	}
+
+	.cardstyle {
+		width: 200px;
+
+	}
 </style>

@@ -20,7 +20,7 @@
   "compileType": "miniprogram",
   "libVersion": "2.30.2",
   "appid": "wx09512d5df38f94d5",
-  "projectname": "ui-demo",
+  "projectname": "地图应用",
   "condition": {},
   "editorSetting": {
     "tabIndent": "insertSpaces",

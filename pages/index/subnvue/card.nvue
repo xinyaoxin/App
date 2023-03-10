@@ -1,111 +1,234 @@
 <template>
 	<div>
-		<uni-card :title=cardInfo.subTitle :sub-title=cardInfo.maintitle :extra=cardInfo.extra class="cardstyle">
+		<!-- <uni-card :title=cardInfo.subTitle :sub-title=cardInfo.maintitle :extra=cardInfo.extra class="cardstylea">
 			<text class="uni-body">{{ cardInfo.extra }}</text>
-			<button class="button" type="primary" @click="toggle('bottom')"><text class="button-text">底部</text></button>
+			<button  class="button" type="primary" @click="toggle('bottom')"><text class="button-text">支付</text></button>
 			<uni-popup ref="popup" background-color="#fff">
 				<view class="popup-content" :class="{ 'popup-height': type === 'left' || type === 'right' }">
-					<button style="width: 200px; margin: 5px auto;" type="primary">支付宝支付</button>
-					<button style="width: 200px; margin: 5px auto;" type="primary">微信支付</button>
+					<button style="width: 200px; margin: 5px auto 5px auto;" type="primary">支付宝支付1</button>
+					<button style="width: 200px; margin: 5px auto 5px auto;" type="primary">微信支付</button>
 				</view>
 			</uni-popup>
 			<button style="width: 80px; margin: 5px auto;" type="primary">导航</button>
+		</uni-card> -->
+		<uni-card :title=cardInfo.subTitle :sub-title=cardInfo.maintitle :extra=cardInfo.extra class="cardstyle">
+			<text class="uni-body">{{ cardInfo.extra }}</text>
+			<button style="width: 80px; margin: 5px auto;" class="button" type="primary" @click="toggle('bottom')"><text
+					class="button-text">底部2 2</text></button>
+			<uni-popup ref="popup" background-color="#fff">
+				<view class="popup-content" :class="{ 'popup-height': type === 'left' || type === 'right' }">
+					<button style="width: 200px; margin: 5px auto;" type="primary" @click="openPayAli">支付宝支付</button>
+					<button style="width: 200px; margin: 5px auto;" type="primary" @click="openPayWx">微信支付</button>
+				</view>
+			</uni-popup>
+			<button style="width: 80px; margin: 5px auto;" type="primary" @click="openOtherMap">导航</button>
 		</uni-card>
 	</div>
 </template>
 
 <script>
+	// import amap from '../../common/AMapWX_SDK_V1.3.0/amap-wx.130.js'
 	export default {
 		data() {
 			return {
-				
-					wWidth:0,
-					windowHeight:0,
-					show: false,
-					type: 'center',
-					href: 'https://uniapp.dcloud.io/component/README?id=uniui',
-					key: "66305aa05776a166b948321344673836",
-					amapPlugin: null,
-					longitude: 118.80470,
-					latitude: 32.06267,
-					markers: [{
-						id: 101, //id 必填项
-						extra: '0.26km',
-						maintitle: '南京AAAAAAAAA',
-						width: 50,
-						height: 50,
-						longitude: 118.84124,
-						latitude: 32.05229,
-						iconPath: "../../static/c1.png",
-						label: {
-							content: '钟山风景区',
-							color: 'red',
-							fontSize: 20
-				
-						}
-					}, {
-						id: 100, //id 必填项
-						maintitle: '南京BBBBBBBBB',
-						extra: '1.24km',
-						width: 50,
-						height: 50,
-						longitude: 118.77148,
-						latitude: 32.01630,
-						iconPath: "../../static/c2.png",
-						label: {
-							content: '秦淮河',
-							color: 'red',
-							fontSize: 20
-				
-						}
-					}],
-					mapInfo: [],
-					polyline: [{
-						points: [],
-						color: "#31c27c",
-						width: 10,
-						arrowLine: true,
-						borderWidth: 2 //线的边框宽度，还有很多参数，请看文档 
-					}],
-					muDD: {},
-					cardInfo: {
-						extra: '',
-						subTitle: '',
-						maintitle: '',
-						latitude: "",
-						longitude: '',
-					},
-					initCardInfo: {}
-				}
-			},
-			mounted() {
-				console.log(this.initCardInfo)
-				this.$nextTick(() => {
-					this.cardInfo.maintitle = this.markers[0].maintitle
-					this.cardInfo.subTitle = this.markers[0].label.content
-					this.cardInfo.extra = '0.26km'
-				})
-				this.muDD = this.markers[0]
-			},
-
-			methods: {
-				toggle(type) {
-					this.type = type
-					// open 方法传入参数 等同在 uni-popup 组件上绑定 type属性
-					this.$refs.popup.open(type)
+				muDD: {},
+				cardInfo: {
+					extra: '',
+					subTitle: '',
+					maintitle: '',
+					latitude: '',
+					longitude: '',
 				},
 			}
+		},
+		mounted() {
+			uni.$on('mapData', res => {
+				console.log('nvue中mounted接收信息', res)
+				this.muDD = res.muDD
+				this.cardInfo = res.cardInfo
+			})
+		},
+		onLoad() {},
+
+		methods: {
+			showCard() {
+				//#ifdef APP-PLUS
+				uni.getSubNVueById('card').show('slide-in-bottom', 200);
+				//#endif
+			},
+
+
+			toggle(type) {
+				this.type = type
+				// open 方法传入参数 等同在 uni-popup 组件上绑定 type属性
+				this.$refs.popup.open(type)
+			},
+
+			openOtherMap(obj) {
+				console.log(123, this.muDD);
+				// uni.openLocation({
+				// 	longitude: this.muDD.longitude,
+				// 	latitude: this.muDD.latitude,
+				// 	address: this.muDD.title,
+				// 	scale: 15,
+				// 	success: function(res) {
+				// 		console.log('success', res);
+				// 	},
+				// 	fail: function() {
+				// 		wx.showToast({
+				// 			title: '定位异常',
+				// 			icon: 'none'
+				// 		})
+				// 	}
+				// });
+				switch (uni.getSystemInfoSync().platform) {
+					case 'android':
+						console.log('运行Android上');
+						let itemLists = ['腾讯地图', '高德地图', '百度地图']
+						uni.showActionSheet({
+							itemList: itemLists,
+							success: function(res) {
+								console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
+								console.log('choseMap',itemLists[res.tapIndex],plus);
+							},
+							fail: function(res) {
+								console.log(res.errMsg);
+							}
+						})
+						
+						break;
+					case 'ios':
+						console.log('运行iOS上');
+						break;
+					default:
+						console.log('运行在开发者工具上');
+						break;
+				}
+				
+			},
+			openPayAli() {
+				console.log('支付');
+				//支付宝 调用之前传入必要数据，向后端请求订单信息orderInfo
+				//wx
+				/*
+				{
+					appid,
+					noncestr,
+					package,
+					partnerid,
+					prepayid,
+					timestamp,
+					sign,
+				}
+				*/
+				let payData = {
+					app_id: '2021003181698306',
+					channel: 'aliPay',
+					title: '标题1111',
+					price: 222,
+					bill_note: '2021231003181698306123',
+					bill_timout: 300,
+				}
+				var orderInfo =
+					'app_id=2021003181698306&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.02%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22314VYGIAGG7ZOYY%22%7D&charset=utf-8&method=alipay.trade.app.pay&sign_type=RSA2&timestamp=2016-08-15%2012%3A12%3A15&version=1.0&sign=MsbylYkCzlfYLy9PeRwUUIg9nZPeN9SfXPNavUCroGKR5Kqvx0nEnd3eRmKxJuthNUx4ERCXe552EV9PfwexqW%2B1wbKOdYtDIb4%2B7PL3Pc94RZL0zKaWcaY3tSL89%2FuAVUsQuFqEJdhIukuKygrXucvejOUgTCfoUdwTi7z%2BZzQ%3D'; //从服务器获取的订单
+				uni.getProvider({
+					service: 'payment',
+					success: function(res) {
+						console.log('获取的服务商', res.provider)
+						if (~res.provider.indexOf('alipay')) {
+							uni.requestPayment({
+								"provider": "alipay", //固定值为"alipay"
+								"orderInfo": orderInfo, //此处为服务器返回的订单信息字符串
+								success: function(res) {
+									var rawdata = JSON.parse(res.rawdata);
+									console.log("支付成功");
+								},
+								fail: function(err) {
+									console.log('支付失败:' + JSON.stringify(err));
+								}
+							});
+						}
+					}
+				});
+			},
+
+			openPayWx() {
+				//支付宝 调用之前传入必要数据，向后端请求订单信息orderInfo
+				//wx
+				/*  
+				{
+					appid,
+					noncestr,
+					package,
+					partnerid,
+					prepayid,
+					timestamp,
+					sign,
+				}
+				*/
+				var orderInfo = {
+					"appid": "wx499123451237c70e", // 应用ID（AppID）
+					"partnerid": "1483245132", // 商户号（PartnerID）
+					"prepayid": "wx202254123423241234234112331be90000", // 预支付交易会话ID
+					"package": "Sign=WXPay", // 固定值
+					"noncestr": "c5sEwbaNPiXAF3iv", // 随机字符串
+					"timestamp": 1597935292,
+					"sign": "A842B45937F6EFF60DEC7A2EAA52D5A0" // 签名，这里用的 MD5 签名
+				};
+				uni.getProvider({
+					service: 'payment',
+					success: function(res) {
+						console.log(res.provider)
+						if (~res.provider.indexOf('wxpay')) {
+							uni.requestPayment({
+								"provider": "wxpay", //固定值为"wxpay"
+								"orderInfo": orderInfo,
+								success: function(res) {
+									var rawdata = JSON.parse(res.rawdata);
+									console.log("支付成功");
+								},
+								fail: function(err) {
+									console.log('支付失败:' + JSON.stringify(err));
+								}
+							});
+						}
+					}
+				});
+			}
+
 
 		}
+	}
 </script>
 
 <style>
-	.cardstyle{
-		position: absolute;
-		top: 300px;
-		left: 50%;
-		transform: translate(-50%);
-		background-color: red;
-		}
+	.button {
+		width: 80px;
+		margin: 5px;
+	}
 
+	.button-text {
+		/* font-size: 12px; */
+		color: aliceblue;
+	}
+
+	.popup-content {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+	}
+
+	.uni-body {
+		/* font-size: 12px; */
+		/* font-weight: 100; */
+		color: red;
+	}
+
+	.cardstyle {
+		width: 300px;
+		position: absolute;
+		bottom: 20px;
+		left: 20px;
+	}
 </style>
