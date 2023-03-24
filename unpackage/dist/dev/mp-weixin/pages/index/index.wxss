@@ -1,20 +1,51 @@
 
 .container {
-		padding: 0px 5px;
-		margin: 0px;
-		font-size: 14px;
-		line-height: 24px;
+	padding: 0px 5px;
+	margin: 0px;
+	font-size: 14px;
+	line-height: 24px;
 }
-/* 
-	#map_container {
-		width: 10%;
 
-	} */
-.covewContainer {
-		position: relative;
-		top: 55vh;
-}
+
+/* #map_container { */
+
+
+/* width: 10%; */
+
+
+/* z-index: -199; */
+
+
+/* } */
+
+
+/* .covewContainer {
+	position: relative;
+	top: 55vh;
+} */
 .cardstyle {
-		width: 200px;
+	position: absolute;
+	top: -200px;
+	width: 200px;
+	z-index: 99;
 }
+
+
+/* @keyframes example {
+	from {
+		background-color: green;
+	}
+
+	to {
+		background-color: yellow;
+	}
+}
+
+.frametest {
+	width: 100px;
+	height: 100px;
+	background-color: yellow;
+	animation-name: example;
+	animation-duration: 5s;
+} */
 

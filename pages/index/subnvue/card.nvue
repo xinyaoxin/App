@@ -1,28 +1,23 @@
 <template>
 	<div>
-		<!-- <uni-card :title=cardInfo.subTitle :sub-title=cardInfo.maintitle :extra=cardInfo.extra class="cardstylea">
-			<text class="uni-body">{{ cardInfo.extra }}</text>
-			<button  class="button" type="primary" @click="toggle('bottom')"><text class="button-text">支付</text></button>
-			<uni-popup ref="popup" background-color="#fff">
-				<view class="popup-content" :class="{ 'popup-height': type === 'left' || type === 'right' }">
-					<button style="width: 200px; margin: 5px auto 5px auto;" type="primary">支付宝支付1</button>
-					<button style="width: 200px; margin: 5px auto 5px auto;" type="primary">微信支付</button>
-				</view>
-			</uni-popup>
-			<button style="width: 80px; margin: 5px auto;" type="primary">导航</button>
-		</uni-card> -->
-		<uni-card :title=cardInfo.subTitle :sub-title=cardInfo.maintitle :extra=cardInfo.extra class="cardstyle">
-			<text class="uni-body">{{ cardInfo.extra }}</text>
-			<button style="width: 80px; margin: 5px auto;" class="button" type="primary" @click="toggle('bottom')"><text
-					class="button-text">底部2 2</text></button>
-			<uni-popup ref="popup" background-color="#fff">
-				<view class="popup-content" :class="{ 'popup-height': type === 'left' || type === 'right' }">
-					<button style="width: 200px; margin: 5px auto;" type="primary" @click="openPayAli">支付宝支付</button>
-					<button style="width: 200px; margin: 5px auto;" type="primary" @click="openPayWx">微信支付</button>
-				</view>
-			</uni-popup>
-			<button style="width: 80px; margin: 5px auto;" type="primary" @click="openOtherMap">导航</button>
-		</uni-card>
+		<uni-transition ref="ani" custom-class="transition" :mode-class="modeClass" :styles="styles" :show="show">
+			<uni-card :title=cardInfo.subTitle :sub-title=cardInfo.maintitle :extra=cardInfo.extra class="cardstyle"
+				@click="hideCard">
+				<text class="uni-body">{{ cardInfo.extra }}</text>
+
+				<uni-popup ref="popup" background-color="#fff">
+					<view class="popup-content" :class="{ 'popup-height': type === 'left' || type === 'right' }">
+						<button style="width: 200px; margin: 5px auto;" type="primary"
+							@click="openPayAli">支付宝支付1</button>
+						<button style="width: 200px; margin: 5px auto;" type="primary" @click="openPayWx">微信支付</button>
+					</view>
+				</uni-popup>
+				<button style="width: 100px; height: 30px; margin: 5px auto;" type="primary"
+					@click="openOtherMap">导航</button>
+				<button style="width: 100px; height: 30px; margin: 5px auto;" class="button" type="primary"
+					@click.stop="toggle($event)"><text class="button-text">去付款</text></button>
+			</uni-card>
+		</uni-transition>
 	</div>
 </template>
 
@@ -31,6 +26,9 @@
 	export default {
 		data() {
 			return {
+				show: false,
+				modeClass: 'fade',
+				styles: {},
 				muDD: {},
 				cardInfo: {
 					extra: '',
@@ -46,65 +44,126 @@
 				console.log('nvue中mounted接收信息', res)
 				this.muDD = res.muDD
 				this.cardInfo = res.cardInfo
+				this.upCard()
 			})
+			this.show = true
+			this.modeClass = ['fade', 'zoom-in']
+
 		},
-		onLoad() {},
+		onLoad() {
+			// #ifdef APP-NVUE
+			this.styles = {
+				justifyContent: 'center',
+				alignItems: 'center',
+				// width: '400px',
+				// height: '400px',
+				borderRadius: '5px',
+				textAlign: 'center',
+				position: "absolute",
+				bottom: "20px",
+				left: "20px",
+			}
+			// #endif
+		},
 
 		methods: {
-			showCard() {
-				//#ifdef APP-PLUS
-				uni.getSubNVueById('card').show('slide-in-bottom', 200);
-				//#endif
+			open(mode) {
+				this.show = !this.show
+			},
+			handle(type) {
+				this.show = !this.show
+				this.modeClass = type
+			},
+			hideCard() {
+				// this.$refs.ani.step(
+				// 	{
+				// 		// width: '100px',
+				// 		// height: '100px',
+				// 		// rotate: '180',
+				// 	},
+				// 	{
+				// 		delay: 200,
+				// 		duration: 300
+				// 	}
+				// )
+
+				this.$refs.ani.step({
+					translateY: '180px',
+				}, {
+					timingFunction: 'linear',
+					duration: 800
+				})
+
+				this.$refs.ani.run()
+
+			},
+			upCard() {
+				this.$refs.ani.step({
+					translateY: '180px',
+				}, {
+					timingFunction: 'linear',
+					duration: 2
+				})
+
+				this.$refs.ani.step({
+					translateY: '0px',
+				}, {
+					timingFunction: 'linear',
+					duration: 1000
+				})
+
+				this.$refs.ani.run()
+
 			},
 
 
-			toggle(type) {
-				this.type = type
+			toggle(e) {
+				this.type = 'bottom'
 				// open 方法传入参数 等同在 uni-popup 组件上绑定 type属性
-				this.$refs.popup.open(type)
+				this.$refs.popup.open(this.type)
+				e.stopPropagation()
 			},
 
 			openOtherMap(obj) {
 				console.log(123, this.muDD);
-				// uni.openLocation({
-				// 	longitude: this.muDD.longitude,
-				// 	latitude: this.muDD.latitude,
-				// 	address: this.muDD.title,
-				// 	scale: 15,
-				// 	success: function(res) {
-				// 		console.log('success', res);
-				// 	},
-				// 	fail: function() {
-				// 		wx.showToast({
-				// 			title: '定位异常',
-				// 			icon: 'none'
-				// 		})
-				// 	}
-				// });
-				switch (uni.getSystemInfoSync().platform) {
-					case 'android':
-						console.log('运行Android上');
-						let itemLists = ['腾讯地图', '高德地图', '百度地图']
-						uni.showActionSheet({
-							itemList: itemLists,
-							success: function(res) {
-								console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
-								console.log('choseMap',itemLists[res.tapIndex],plus);
-							},
-							fail: function(res) {
-								console.log(res.errMsg);
-							}
+				uni.openLocation({
+					longitude: this.muDD.longitude,
+					latitude: this.muDD.latitude,
+					address: this.muDD.title,
+					scale: 15,
+					success: function(res) {
+						console.log('success', res);
+					},
+					fail: function() {
+						wx.showToast({
+							title: '定位异常',
+							icon: 'none'
 						})
-						
-						break;
-					case 'ios':
-						console.log('运行iOS上');
-						break;
-					default:
-						console.log('运行在开发者工具上');
-						break;
-				}
-				
+					}
+				});
+				// switch (uni.getSystemInfoSync().platform) {
+				// 	case 'android':
+				// 		console.log('运行Android上');
+				// 		let itemLists = ['腾讯地图', '高德地图', '百度地图']
+				// 		uni.showActionSheet({
+				// 			itemList: itemLists,
+				// 			success: function(res) {
+				// 				console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
+				// 				console.log('choseMap',itemLists[res.tapIndex],plus);
+				// 			},
+				// 			fail: function(res) {
+				// 				console.log(res.errMsg);
+				// 			}
+				// 		})
+				// 		break;
+				// 	case 'ios':
+				// 		console.log('运行iOS上');
+				// 		break;
+				// 	default:
+				// 		console.log('运行在开发者工具上');
+				// 		break;
+				// }
+
 			},
 			openPayAli() {
 				console.log('支付');
@@ -145,6 +204,7 @@
 								},
 								fail: function(err) {
 									console.log('支付失败:' + JSON.stringify(err));
+									return
 								}
 							});
 						}
@@ -202,11 +262,6 @@
 </script>
 
 <style>
-	.button {
-		width: 80px;
-		margin: 5px;
-	}
-
 	.button-text {
 		/* font-size: 12px; */
 		color: aliceblue;
@@ -220,15 +275,99 @@
 	}
 
 	.uni-body {
-		/* font-size: 12px; */
-		/* font-weight: 100; */
-		color: red;
+		color: green;
 	}
 
 	.cardstyle {
 		width: 300px;
-		position: absolute;
-		bottom: 20px;
-		left: 20px;
+	}
+
+
+
+	.example {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		justify-content: center;
+		align-items: center;
+		height: 150px;
+		background-color: #fff;
+	}
+
+	.example-body {
+		padding: 10px 20px;
+		padding-bottom: 0px;
+	}
+
+	.transition-button {
+		/* #ifndef APP-NVUE */
+		width: 100%;
+		/* #endif */
+		flex: 1;
+		margin-bottom: 10px;
+	}
+
+	/* #ifndef APP-NVUE */
+	.example ::v-deep .transition {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100px;
+		height: 100px;
+		border-radius: 5px;
+		text-align: center;
+		background-color: #4cd964;
+		box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+	}
+
+	/* #endif */
+
+	.text {
+		font-size: 14px;
+		color: #fff;
+	}
+
+
+	.example {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		justify-content: center;
+		align-items: center;
+		height: 150px;
+		background-color: #fff;
+	}
+
+	.example-body {
+		padding: 10px 20px;
+		padding-bottom: 0px;
+	}
+
+	.transition-button {
+		/* #ifndef APP-NVUE */
+		width: 100%;
+		/* #endif */
+		flex: 1;
+		margin-bottom: 10px;
+	}
+
+	/* #ifndef APP-NVUE */
+	.example ::v-deep .transition {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100px;
+		height: 100px;
+		border-radius: 5px;
+		text-align: center;
+		background-color: #4cd964;
+		box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+	}
+
+	/* #endif */
+
+	.text {
+		font-size: 14px;
+		color: #fff;
 	}
 </style>

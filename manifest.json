@@ -11,9 +11,9 @@
         "nvueCompiler" : "uni-app",
         "nvueStyleCompiler" : "uni-app",
         "splashscreen" : {
-            "alwaysShowBeforeRender" : true,
-            "waiting" : true,
-            "autoclose" : true,
+            "alwaysShowBeforeRender" : false,
+            "waiting" : false,
+            "autoclose" : false,
             "delay" : 0
         },
         "modules" : {
@@ -101,6 +101,14 @@
                         "spotlight@3x" : "unpackage/res/icons/120x120.png"
                     }
                 }
+            },
+            "splashscreen" : {
+                "androidStyle" : "common",
+                "android" : {
+                    "hdpi" : "C:/Users/issuser/Desktop/1678435242396.png",
+                    "xxhdpi" : "C:/Users/issuser/Desktop/1678435242396.png",
+                    "xhdpi" : "C:/Users/issuser/Desktop/1678435242396.png"
+                }
             }
         }
     },
@@ -111,7 +119,10 @@
         /* 小程序特有相关 */
         "appid" : "wx09512d5df38f94d5",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "es6" : true,
+            "postcss" : true,
+            "minified" : true
         },
         "usingComponents" : true,
         "permission" : {
