@@ -1,43 +1,65 @@
 {
-	"pages": [{
-			"path": "pages/login/login"
-		},{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app",
-				"enablePullDownRefresh": true,
-				// "titleNView":false,
-				"app-plus": {
-					"titleNView": {
-						"autoBackButton": true
-					},
-					"subNVues": [{
-						"id": "card", // 唯一标识  
-						"path": "pages/index/subnvue/card", // 页面路径  
-						// "type": "popup", 
-						"style": {
-							// 	"dock": "right",
-							// 	"width": "300px",
-							// 	"height": "350px",
-							"background": "transparent"
-						}
-					}]
-				}
+	"pages": [ {
+		"path": "pages/index/index",
+		"style": {
+			"navigationStyle": "custom",
+			"enablePullDownRefresh": true,
+			"app-plus": {
+				// "subNVues": [{
+				// 	"id": "card", // 唯一标识  
+				// 	"path": "pages/map/subnvue/card", // 页面路径  
+				// 	// "type": "popup", 
+				// 	"style": {
+				// 		// 	"dock": "right",
+				// 		// 	"width": "300px",
+				// 		// 	"height": "350px",
+				// 		"background": "transparent"
+				// 	}
+				// }]
 			}
-		}, {
-			"path": "pages/404/index",
-			"style": {
-				"navigationBarTitleText": "页面丢失",
-				"app-plus": {
-					"titleNView": {
-						"autoBackButton": true,
-						"homeButton": true,
-						"titleAlign": "left"
-					}
+		}
+	}, {
+		"path": "pages/404/index",
+		"style": {
+			"navigationBarTitleText": "页面丢失",
+			"app-plus": {
+				"titleNView": {
+					"autoBackButton": true,
+					"homeButton": true,
+					"titleAlign": "left"
+					// "backgroundColor": "red"
 				}
 			}
 		}
-	],
+	}, {
+		"path": "pages/my/my",
+		"style": {
+			"navigationBarTitleText": "我的",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
+		"path": "pages/question/question",
+		"style": {
+			"navigationBarTitleText": "面试题目",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
+		"path": "pages/contract/contract",
+		"style": {
+			"navigationBarTitleText": "协议相关",
+			"enablePullDownRefresh": false
+		}
+
+	},{
+		"path": "pages/process/process",
+		"style": {
+			"navigationBarTitleText": "面试流程",
+			"enablePullDownRefresh": false
+		}
+	
+	}],
 
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -48,21 +70,27 @@
 			"background": "#efeff4"
 		}
 	},
+
 	"tabBar": {
 		"color": "#7A7E83",
 		"selectedColor": "#3cc51f",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [{
-			"pagePath": "pages/404/index",
-			"iconPath": "static/image/icon_component.png",
-			"selectedIconPath": "static/c1.png",
-			"text": "组件"
-		}, {
 			"pagePath": "pages/index/index",
-			"iconPath": "static/image/icon_API.png",
-			"selectedIconPath": "static/c2.png",
-			"text": "接口"
+			"text": "首页"
+		}, {
+			"pagePath": "pages/question/question",
+			"text": "刷题"
+		}, {
+			"pagePath": "pages/process/process",
+			"text": "流程"
+		}, {
+			"pagePath": "pages/contract/contract",
+			"text": "协议"
+		}, {
+			"pagePath": "pages/my/my",
+			"text": "我的"
 		}]
 	}
 }
