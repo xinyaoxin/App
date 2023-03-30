@@ -1,0 +1,1 @@
+<view><view class="_p">协议相关</view><tabbar vue-id="4339e200-1" selected="{{selected}}" bind:__l="__l"></tabbar></view>

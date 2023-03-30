@@ -101,8 +101,32 @@ var _default = {
   onLaunch: function onLaunch() {
     console.warn('当前组件仅支持 uni_modules 目录结构 ，请升级 HBuilderX 到 3.1.0 版本以上！');
     console.log('App Launch');
+    console.log('>>>>>>>>>>>>app.vue launch');
+    uni.hideTabBar();
+    // let token = uni.getStorageSync('token');
+    // let base_login_name = uni.getStorageSync('base_login_name');
+    // if (true) {
+    // 	//存在则关闭启动页进入首页
+    //
+
+    // } else {
+    // 	//不存在则跳转至登录页
+    // uni.reLaunch({
+    // 	url: "/pages/index/index",
+    // 	success: () => {
+    //
+
+    // 	}
+    // })
+    // }
+    // console.log('2***********>>>',uni);
+    // console.log('3***********>>>',wx);
+    // console.log('1***********>>>',plus);
+    // plus.navigator.closeSplashscreen()
   },
+
   onShow: function onShow() {
+    uni.hideTabBar();
     console.log('App Show');
   },
   onHide: function onHide() {

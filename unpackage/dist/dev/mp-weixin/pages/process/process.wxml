@@ -1,0 +1,1 @@
+<view><view class="_p">工作流程</view><tabbar vue-id="af278c40-1" selected="{{selected}}" bind:__l="__l"></tabbar></view>

@@ -4,6 +4,7 @@
 			console.warn('当前组件仅支持 uni_modules 目录结构 ，请升级 HBuilderX 到 3.1.0 版本以上！')
 			console.log('App Launch')
 			console.log('>>>>>>>>>>>>app.vue launch')
+			uni.hideTabBar()
 			// let token = uni.getStorageSync('token');
 			// let base_login_name = uni.getStorageSync('base_login_name');
 			// if (true) {
@@ -13,17 +14,34 @@
 			// 	// #endif
 			// } else {
 			// 	//不存在则跳转至登录页
-				uni.reLaunch({
-					url: "/pages/index/index",
-					success: () => {
-						// #ifdef APP-PLUS
-						plus.navigator.closeSplashscreen();
-						// #endif
-					}
-				})
+			// uni.reLaunch({
+			// 	url: "/pages/index/index",
+			// 	success: () => {
+			// 		// #ifdef APP-PLUS
+			// 		plus.navigator.closeSplashscreen();
+			// 		// #endif
+			// 	}
+			// })
 			// }
+			// console.log('2***********>>>',uni);
+			// console.log('3***********>>>',wx);
+			// console.log('1***********>>>',plus);
+			// plus.navigator.closeSplashscreen()
+			// console.log(1234);
+			// setTimeout(()=>{
+			// 	uni.hideTabBar()
+			// },100)
+			// uni.switchTab({
+			// url:'/pages/index/index',
+			// success:res=>{
+			// }
+			// })
+		},
+		onLoad() {
+			
 		},
 		onShow: function() {
+			// uni.hideTabBar()
 			console.log('App Show')
 		},
 		onHide: function() {

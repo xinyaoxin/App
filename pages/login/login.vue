@@ -1,4 +1,4 @@
-
+<!-- 
 <template>
 	<view>
 			<view class="login-form-top">登录</view>
@@ -220,4 +220,9 @@
 			}
 		}
 	}
-</style>
+</style> -->
+<template>
+	<view>
+		<p style="background-color: red;">login</p>
+	</view>
+</template>

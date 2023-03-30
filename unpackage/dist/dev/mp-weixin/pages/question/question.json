@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "面试题目",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "tabbar": "/common/tabbar/tabbar"
+  }
+}
