@@ -65,7 +65,25 @@
 		}
 	
 	}    ,{
-            "path" : "common/tabbar/tabbar",
+            "path" : "components/tabbar/tabbar",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "components/class/class",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "components/class/class",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",

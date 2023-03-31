@@ -8,7 +8,7 @@
 </template>
 
 <script>
-	import tabbar from '@/common/tabbar/tabbar.vue'
+	import tabbar from '@/components/tabbar/tabbar.vue'
 	export default {
 		components: {
 			tabbar
@@ -27,18 +27,23 @@
 		mounted() {
 			console.log('&&&&&&&&&&&&&&&&&&&&&&');
 		},
+		onInit() {
+			
+		},
 		onLoad() {
 			uni.hideTabBar()
+			
 		},
 		onShow() {
 			let _this = this
 			uni.getSystemInfo({
 				success: function(res) {
-					_this.webviewStyles.height = res.screenHeight - 128
+					_this.webviewStyles.height = res.screenHeight - 300
 					console.log('^^^^^', res, _this.webviewStyles.height)
 				}
 			});
 			console.log('!!!!!')
+			
 		},
 		onReady() {
 			let tabBarHeight = 0
