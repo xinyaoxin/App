@@ -1,1 +1,1 @@
-<view><view class="_p">面试题</view><tabbar vue-id="0b999f00-1" selected="{{selected}}" bind:__l="__l"></tabbar></view>
+<view class="data-v-315c7946"><view class="_p data-v-315c7946">面试题</view><view class="box data-v-315c7946" style="{{(boxStyle)}}">asd</view><tabbar class="tabBar data-v-315c7946" vue-id="0b999f00-1" selected="{{selected}}" bind:__l="__l"></tabbar></view>

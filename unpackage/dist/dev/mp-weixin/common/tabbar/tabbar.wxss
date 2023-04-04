@@ -1,13 +1,13 @@
 
 .tabbar.data-v-b0f2ddce {
-	width: 1000%;
+	width: 100%;
 	position: fixed;
+	bottom: 0;
 	box-sizing: border-box;
 }
 .tabbar-list.data-v-b0f2ddce {
-	width: 100%;
-	background-color: #fff;
-	position: fixed;
+	width: 100%; 
+	position: relative;
 	left: 0;
 	bottom: 0;
 	box-shadow: 0px -12rpx 37rpx 0rpx rgba(230, 235, 243, 0.9);
@@ -28,6 +28,7 @@
 	height: 56rpx;
 	margin: 0 auto;
 	padding: 20rpx;
+	background-color: transparent;
 }
 .icon image.data-v-b0f2ddce {
 	width: 56rpx;

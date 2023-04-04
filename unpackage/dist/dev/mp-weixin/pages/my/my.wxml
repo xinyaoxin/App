@@ -1,1 +1,1 @@
-<view class="bg data-v-0be17cc6"><view class="_p data-v-0be17cc6">我的页面a</view><image src="../../static/Add User-Light.png" mode class="data-v-0be17cc6"></image><tabbar vue-id="704e9d00-1" selected="{{selected}}" class="data-v-0be17cc6" bind:__l="__l"></tabbar></view>
+<view class="bg data-v-0be17cc6"><web-view webview-styles="{{webviewStyles}}" src="https://www.bilibili.com/" class="data-v-0be17cc6"></web-view><tabbar class="tabBar data-v-0be17cc6" vue-id="704e9d00-1" selected="{{selected}}" bind:__l="__l"></tabbar></view>

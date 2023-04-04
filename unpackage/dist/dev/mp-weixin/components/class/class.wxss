@@ -1,0 +1,10 @@
+
+.main.data-v-e835e094{
+	width: 676rpx;
+	margin-left: 36rpx;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+}
+

@@ -103,6 +103,11 @@ var _default = {
     console.log('App Launch');
     console.log('>>>>>>>>>>>>app.vue launch');
     uni.hideTabBar();
+    // this.checkArguments();
+    // 重点是以下： 一定要监听后台恢复 ！一定要
+    // plus.globalEvent.addEventListener('newintent', (e) => {
+    // 	// this.checkArguments(); // 检测启动参数  
+    // });
     // let token = uni.getStorageSync('token');
     // let base_login_name = uni.getStorageSync('base_login_name');
     // if (true) {
@@ -123,10 +128,19 @@ var _default = {
     // console.log('3***********>>>',wx);
     // console.log('1***********>>>',plus);
     // plus.navigator.closeSplashscreen()
+    // console.log(1234);
+    // setTimeout(()=>{
+    // 	uni.hideTabBar()
+    // },100)
+    // uni.switchTab({
+    // url:'/pages/index/index',
+    // success:res=>{
+    // }
+    // })
   },
-
+  onLoad: function onLoad() {},
   onShow: function onShow() {
-    uni.hideTabBar();
+    // uni.hideTabBar()
     console.log('App Show');
   },
   onHide: function onHide() {
@@ -136,6 +150,32 @@ var _default = {
     uni.navigateTo({
       url: '/pages/404/index'
     });
+  },
+  methods: {
+    // checkArguments() {
+    // 	var args = plus.runtime.arguments;
+    // 	if (args) {
+    // 		console.log('app.vue-onShow', args);
+    // 		let args1 = JSON.parse(args);
+    // 		if (args1.BaNotifyID) { //判断是否为通知传来的消息
+    // 			//这里写你的处理逻辑
+    // 			//args参数见“点击事件参数”
+    // 			console.log('args.BaNotifyID', args1.BaNotifyID);
+    // 			uni.navigateTo({
+    // 				url:'/pages/my/my'
+    // 			})
+    // 			uni.showToast({
+    // 				title: "点击BaNotifyID：" + args1.BaNotifyID,
+    // 				icon: "none",
+    // 				duration: 3000
+    // 			})
+    // 			// uni.navigateTo({
+    // 			// 	url: '/pages/notify/notify'
+    // 			// })
+    // 		}
+    // 		// 处理args参数，如直达到某新页面等
+    // 	}
+    // },
   }
 };
 exports.default = _default;

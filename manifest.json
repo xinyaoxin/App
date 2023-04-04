@@ -3,7 +3,7 @@
     "appid" : "__UNI__B87134F",
     "description" : "",
     "versionName" : "1.0.0",
-    "versionCode" : "100",
+    "versionCode" : 101,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
@@ -33,6 +33,7 @@
                     "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.BIND_CARRIER_MESSAGING_SERVICE\"/>",
                     "<uses-permission android:name=\"android.permission.CAMERA\"/>",
                     "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
                     "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
@@ -71,13 +72,7 @@
                     }
                 },
                 "ad" : {},
-                "push" : {
-                    "unipush" : {
-                        "version" : "2",
-                        "offline" : true,
-                        "mi" : {}
-                    }
-                }
+                "push" : {}
             },
             "icons" : {
                 "android" : {
@@ -117,6 +112,22 @@
                     "hdpi" : "C:/Users/issuser/Desktop/1678435242396.png",
                     "xxhdpi" : "C:/Users/issuser/Desktop/1678435242396.png",
                     "xhdpi" : "C:/Users/issuser/Desktop/1678435242396.png"
+                }
+            }
+        },
+        "nativePlugins" : {
+            "Ba-Notify" : {
+                "__plugin_info__" : {
+                    "name" : "应用消息通知插件（多种样式，新增支持常驻通知模式） Ba-Notify - [试用版，仅用于自定义调试基座]",
+                    "description" : "Ba-Notify 是一款功能全面的uniapp消息通知插件，可在状态栏显示各种样式的消息通知。包含普通、常驻、大图、多行、进度、按钮等通知；支持检查、设置、清除通知；支持根据渠道和ID，分类管管理；",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=9231",
+                    "android_package_name" : "",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 0,
+                    "pid" : "9231",
+                    "parameters" : {}
                 }
             }
         }

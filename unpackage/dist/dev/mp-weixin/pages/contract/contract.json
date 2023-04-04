@@ -2,6 +2,6 @@
   "navigationBarTitleText": "协议相关",
   "enablePullDownRefresh": false,
   "usingComponents": {
-    "tabbar": "/common/tabbar/tabbar"
+    "tabbar": "/components/tabbar/tabbar"
   }
 }
